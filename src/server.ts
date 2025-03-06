@@ -13,7 +13,7 @@ app.use(router);
 
 app.use(
   '/files',
-  express.static(path.resolve(__dirname, '..', 'img'))
+  express.static(path.resolve(__dirname, '/app', 'img'))
 )
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
