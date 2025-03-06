@@ -26,10 +26,11 @@ import { FinishOrderController } from './controllers/order/FinishOrderController
 import { isAuthenticated } from './middlewares/isAuthenticated'
 
 import uploadConfig from './config/multer'
+import { ListProductController } from './controllers/product/ListProductController';
 
 const router = Router();
 
-const upload = multer(uploadConfig.upload("./img"));
+const upload = multer(uploadConfig.upload("/app/img"));
 
 //-- ROTAS USER --
 router.post('/users', new CreateUserController().handle)
@@ -45,7 +46,7 @@ router.get('/category', isAuthenticated, new ListCategoryController().handle )
 
 //-- ROTAS PRODUCT
 router.post('/product', isAuthenticated, upload.single('file'), new CreateProductController().handle )
-
+router.get('/product', isAuthenticated, new ListProductController().handle )
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle )
 
 //-- ROTAS ORDER
