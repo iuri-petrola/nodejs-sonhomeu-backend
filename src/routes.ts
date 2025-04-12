@@ -27,6 +27,8 @@ import { isAuthenticated } from './middlewares/isAuthenticated'
 
 import uploadConfig from './config/multer'
 import { ListProductController } from './controllers/product/ListProductController';
+import { AddCartItemController } from './controllers/cart/AddCartItemController';
+import { CartController } from './controllers/cart/cartController';
 
 const router = Router();
 
@@ -49,6 +51,16 @@ router.post('/product', isAuthenticated, upload.single('file'), new CreateProduc
 //router.get('/product', isAuthenticated, new ListProductController().handle )
 router.get('/product', new ListProductController().handle )
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle )
+
+//-- ROTAS CARRINHO
+router.post('/cart', isAuthenticated, new CartController().addItem )
+//router.get('/cart', isAuthenticated, new CartController().getItems);
+router.get('/cart', isAuthenticated, new CartController().getCart);
+router.patch('/cart/close', isAuthenticated, new CartController().closeCart);
+
+//router.post('/cart/add', new AddCartItemController().handle )
+router.post('/cart/add', isAuthenticated, new AddCartItemController().handle )
+
 
 //-- ROTAS ORDER
 router.post('/order', isAuthenticated, new CreateOrderController().handle )

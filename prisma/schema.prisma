@@ -10,7 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+// Execute estes comandos após modificar o schema:
+// npx prisma generate                                                            # Regenera o client
+// npx prisma migrate dev --skip-generate --create-only --name add_cart_model     # Cria a migração
+// npx prisma migrate deploy                                                      # aplicar migraçao
+
+// npx prisma db push                                                             # Forçar atualização do schema sem migrar
+
+// OU SOMENTE ABAIXO
 // criar uma migration: yarn prisma migrate dev
+
 model User {
   id String @id @default(uuid())
   name String
@@ -20,6 +30,8 @@ model User {
   updated_at DateTime? @default(now())
 
   @@map("users")
+
+  carts Cart[] // Relação inversa
 }
 
 model Category{
@@ -46,6 +58,7 @@ model Product{
   @@map("products")
   category_id String
   items Item[]
+  cartItems CartItem[] // Relação inversa
 }
 
 model Order{
@@ -76,4 +89,22 @@ model Item{
   order_id String
   product_id String
 
+}
+
+model Cart {
+  id        String    @id @default(uuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  open      Boolean   @default(true) // Novo campo
+  createdAt DateTime  @default(now())
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
 }
