@@ -2,25 +2,43 @@ import prismaClient from '../../prisma';
 
 export class CartService {
   async addToCart(userId: string, productId: string) {
-    // 1. Encontra ou cria o carrinho de forma segura
-    const cart = await prismaClient.cart.upsert({
-      where: { 
-        userId: userId // Forma correta de referenciar campos únicos
+    // 1. Verificar se existe carrinho aberto
+    let cart = await prismaClient.cart.findFirst({
+      where: {
+        userId,
+        open: true // Só busca carrinhos abertos
       },
-      create: {
-        userId: userId,
-      },
-      update: {},
-      include: {
-        items: {
-          include: {
-            product: true
-          }
-        }
-      }
+      include: { items: true }
     });
 
-    // 2. Verifica se o item já existe no carrinho
+    // 2. Se não existir ABERTO, verifica se existe FECHADO
+    if (!cart) {
+      const closedCart = await prismaClient.cart.findFirst({
+        where: { userId }
+      });
+
+      // 3. Se existir FECHADO, cria um NOVO carrinho
+      if (closedCart) {
+        cart = await prismaClient.cart.create({
+          data: {
+            userId,
+            open: true
+          },
+          include: { items: true }
+        });
+      } else {
+        // 4. Se não existir nenhum carrinho, cria o primeiro
+        cart = await prismaClient.cart.create({
+          data: {
+            userId,
+            open: true
+          },
+          include: { items: true }
+      });
+    }
+  }
+
+   // 2. Verifica se o item já existe no carrinho
     const existingItem = cart.items.find(item => item.productId === productId);
 
     if (existingItem) {
@@ -75,25 +93,25 @@ export class CartService {
     }
   }
 
-  async getOrCreateCart(userId: string) {
+  //async getOrCreateCart(userId: string) {
     // Tenta encontrar ou criar o carrinho
-    const cart = await prismaClient.cart.upsert({
-      where: { userId },
-      create: { 
-        userId,
-        items: { create: [] } // Cria com array vazio
-      },
-      update: {},
-      include: {
-        items: {
-          include: {
-            product: true
-          }
-        }
-      }
-    });
-    return cart;
-  }
+  //  const cart = await prismaClient.cart.upsert({
+  //    where: { userId },
+  //    create: { 
+  //      userId,
+  //      items: { create: [] } // Cria com array vazio
+  //    },
+  //    update: {},
+  //    include: {
+  //      items: {
+  //        include: {
+  //          product: true
+  //        }
+  //      }
+  //    }
+  //  });
+  //  return cart;
+  //}
 
   async getUserCartItems(userId: string) {
     const cart = await prismaClient.cart.findFirst({

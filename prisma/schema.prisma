@@ -93,11 +93,14 @@ model Item{
 
 model Cart {
   id        String    @id @default(uuid())
-  userId    String    @unique
+  userId    String    
   user      User      @relation(fields: [userId], references: [id])
   items     CartItem[]
   open      Boolean   @default(true) // Novo campo
   createdAt DateTime  @default(now())
+
+  // Adicione um índice composto único
+  @@unique([userId, open], name: "userId_open")
 }
 
 model CartItem {
