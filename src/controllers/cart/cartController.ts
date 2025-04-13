@@ -9,6 +9,8 @@ export class CartController {
     try {
       const cartService = new CartService();
       const { productId, userId } = req.body;
+      //const { productId } = req.body;
+      //const userId = req.user?.id;
 
       console.log("Corpo recebido:", req.body); // Debug
 
@@ -31,7 +33,7 @@ export class CartController {
 
     } catch (error) {
       console.error('[CART_CONTROLLER_ERROR]', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Erro ao adicionar item no carrinho' });
     }
   }
 
@@ -92,9 +94,11 @@ export class CartController {
     try {
       const userId = req.user?.id;
   
-      await prismaClient.cart.update({
-        where: { userId },
-        data: { open: false }
+  
+      // Fecha TODOS os carrinhos abertos do usuário
+      await prismaClient.cart.updateMany({
+        where: { userId, open: true },
+        data: { open: false },
       });
   
       return res.status(200).json({ message: 'Carrinho finalizado' });
