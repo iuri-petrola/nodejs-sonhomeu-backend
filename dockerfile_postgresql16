@@ -1,0 +1,67 @@
+#Imagem padrao ubuntu:22.04 do repositorio oficial
+FROM ubuntu:22.04
+
+# Adicionar Permissao no tmp
+RUN chmod 777 /tmp
+
+# instalação de pacotes basicos
+RUN apt update && apt install -y vim links net-tools apt-utils unzip telnet openssh-server gnupg wget sudo curl supervisor tzdata
+#initscripts 
+
+# Instalação do locale pt_BR
+RUN apt update &&  apt install -y locales && rm -rf /var/lib/apt/lists/* \
+    && localedef -i pt_BR -c -f UTF-8 -A /usr/share/locale/locale.alias pt_BR.UTF-8
+ENV LANG pt_BR.utf8
+
+
+# Configurar Timezone America/Fortaleza
+RUN	echo "America/Fortaleza" > /etc/timezone && rm -f  /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
+
+### Configurar Postgres ###
+
+# adicionar chave do repositorio
+RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
+
+# adicionar o repo do postgresql
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main" >> /etc/apt/sources.list.d/pgdg.list
+
+# Instalação dos pacotes do postgres
+RUN apt update && apt install -y  postgresql-16 postgresql-contrib-16 && apt clean
+
+# permissao para o postgres executar sudo sem senha
+RUN echo "postgres ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+
+# A partir de agora ira executar os comandos com usuario postgres
+USER postgres
+
+# Alteração senha usuario Postgres
+RUN    /etc/init.d/postgresql start &&\
+    psql --command "ALTER USER postgres WITH SUPERUSER PASSWORD 'P0stgr3sqL';" &&\
+    psql --command "CREATE USER user_nodejs_someu WITH ENCRYPTED password 'pass_nodejs_someu';" &&\
+    psql --command "CREATE DATABASE db_nodejs_someu OWNER user_nodejs_someu;" &&\
+    psql --command "GRANT ALL PRIVILEGES ON DATABASE db_nodejs_someu to user_nodejs_someu;"
+
+
+# A partir de agora ira executar os comandos com usuario root
+USER root
+
+# permitir conexoes a partir de outras redes
+RUN echo "host 		all  	all    0.0.0.0/0  	 md5" >> /etc/postgresql/16/main/pg_hba.conf
+RUN echo "listen_addresses= '*'" >> /etc/postgresql/16/main/postgresql.conf       
+
+
+ENTRYPOINT sudo -H -u postgres bash -c '/usr/lib/postgresql/16/bin/postgres -D /var/lib/postgresql/16/main -c config_file=/etc/postgresql/16/main/postgresql.conf'
+
+# Adicionando configuração para multiprocessos no conteiner.
+#COPY supervisord.conf /etc/supervisord.conf
+
+# Iniciar o serviço Supervisor ao iniciar o container
+#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
+
+# expor a porta
+# EXPOSE 22 5432
+
+# adiconando volumes de config , logs e database
+# VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]

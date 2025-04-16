@@ -1,13 +1,17 @@
 # docker build e push image
-    docker build --push -t iuripetrola/nodejs-smk:latest .
+    docker build -t iuripetrola/nodejs-someu-back:latest . --push 
+    docker build -t iuripetrola/postgresql-someu:16 -f dockerfile_postgresql16 . --push 
+
 
 # Criar rede
-#    docker network create --subnet=10.0.0.0/24 --gateway 10.0.0.1 net_nodejs_smk && \
+   docker network create --subnet=10.0.0.0/24 --gateway 10.0.0.1 net_someu
 
 # Iniciar container BD
-#    docker run -itd --name postgresql16 -h postgresql16  --net net_nodejs_smk --restart unless-stopped  -p 5432:5432  -v postgresql16:/etc/postgresql/16/main iuripetrola/postgresql:v16 && \
+   docker run -itd --name postgresql16 -h postgresql16  --net net_someu --restart unless-stopped  -p 5432:5432  -v postgresql16:/etc/postgresql/16/main iuripetrola/postgresql-someu:16
 
 # Iniciar container App
-    docker run -itd --name nodejs_smk -h nodejs_smk --net net_nodejs_smk --restart unless-stopped  -p 80:80 --mount type=bind,source=/home/iuri/iuri.petrola@gmail.com-OneDrive/Sistema-Sonho-Meu-Kids/Nodejs-Sonho-meu-kids/,target=/app iuripetrola/nodejs-smk:latest
+    docker run -itd --name nodejs-someu-back -h nodejs-someu-back --net net_someu --restart unless-stopped  -p 3333:3333 --mount type=bind,source=/app/img/,target=/app/img/ iuripetrola/nodejs-someu-back:latest
+    
+    #--mount type=bind,source=/home/iuri/iuri.petrola@gmail.com-OneDrive/Sistema-Sonho-Meu-Kids/Nodejs-Sonho-meu-kids/,target=/app
 
 
