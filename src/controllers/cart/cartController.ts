@@ -92,16 +92,35 @@ export class CartController {
 
   async closeCart(req: Request, res: Response) {
     try {
-      const userId = req.user?.id;
+      //const userId = req.user?.id;
+      const userId = req.body.userId;
   
-  
-      // Fecha TODOS os carrinhos abertos do usuário
-      await prismaClient.cart.updateMany({
-        where: { userId, open: true },
-        data: { open: false },
+      if (!userId) {
+        return res.status(400).json({ error: 'ID do usuário não enviado' });
+      }
+
+       // Procura o carrinho aberto
+      const cartOpen = await prismaClient.cart.findFirst({
+        where: {
+          userId,
+          open: true
+        }
       });
-  
+
+      if (!cartOpen) {
+        return res.status(404).json({ error: 'Nenhum carrinho aberto encontrado para este usuário.' });
+      }
+
+      // Fecha TODOS os carrinhos abertos do usuário
+      if (cartOpen.open) {
+        await prismaClient.cart.update({
+          where: { id: cartOpen.id  },
+          data: { open: false }
+        });
+      }
+      
       return res.status(200).json({ message: 'Carrinho finalizado' });
+      
     } catch (error) {
       console.error('[CLOSE_CART_ERROR]', error);
       return res.status(500).json({ error: 'Erro ao finalizar carrinho' });

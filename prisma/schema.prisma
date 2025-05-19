@@ -15,6 +15,7 @@ datasource db {
 // npx prisma generate                                                            # Regenera o client
 // npx prisma migrate dev --skip-generate --create-only --name add_cart_model     # Cria a migração
 // npx prisma migrate deploy                                                      # aplicar migraçao
+// npx prisma migrate dev --name remove-user-open-unique
 
 // npx prisma db push                                                             # Forçar atualização do schema sem migrar
 
@@ -99,8 +100,10 @@ model Cart {
   open      Boolean   @default(true) // Novo campo
   createdAt DateTime  @default(now())
 
+  @@index([userId])
+
   // Adicione um índice composto único
-  @@unique([userId, open], name: "userId_open")
+  // @@unique([userId, open], name: "userId_open")
 }
 
 model CartItem {

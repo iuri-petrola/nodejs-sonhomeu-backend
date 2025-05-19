@@ -36,6 +36,14 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 RUN node --version
 RUN npm --version
 
+# variaveis de ambiente
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
+
+
 WORKDIR /app
 COPY package.json ./
 RUN npm install
