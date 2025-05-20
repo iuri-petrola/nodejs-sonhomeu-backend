@@ -20,28 +20,29 @@ RUN	echo "America/Fortaleza" > /etc/timezone && rm -f  /etc/localtime && dpkg-re
 
 
 ### Configurar Node ###
-#RUN apt update && apt install -y curl
-#RUN curl -fsSL https://deb.nodesource.com/setup_18.20.7 | bash
-#RUN apt update &&  apt install node=18.20.7
+# Instala dependências e Node.js 18.20.8 via NodeSource
+RUN apt update && apt install -y curl
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt install -y nodejs=18.20.8-1nodesource1
 
 # Instale o NVM (Gerenciador de versoes do NODE) NODE e NPM com:
-ENV NODE_VERSION=18.20.7
-RUN apt update && apt install -y curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-ENV NVM_DIR=/root/.nvm
-RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
-ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-RUN node --version
-RUN npm --version
+#ENV NODE_VERSION=18.20.8
+#RUN apt update && apt install -y curl
+#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+#ENV NVM_DIR=/root/.nvm
+#RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+#RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+#RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+#ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+#RUN node --version
+#RUN npm --version
 
 # variaveis de ambiente
-ARG DATABASE_URL
-ENV DATABASE_URL=$DATABASE_URL
+#ARG DATABASE_URL
+#ENV DATABASE_URL=$DATABASE_URL
 
-ARG JWT_SECRET
-ENV JWT_SECRET=$JWT_SECRET
+#ARG JWT_SECRET
+#ENV JWT_SECRET=$JWT_SECRET
 
 
 WORKDIR /app
