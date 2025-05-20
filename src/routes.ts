@@ -32,7 +32,7 @@ import { CartController } from './controllers/cart/cartController';
 
 const router = Router();
 
-const upload = multer(uploadConfig.upload("/app/img"));
+const upload = multer(uploadConfig.upload("/mnt/img"));
 
 //-- ROTAS USER --
 router.post('/users', new CreateUserController().handle)
