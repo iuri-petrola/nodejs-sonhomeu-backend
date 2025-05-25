@@ -127,4 +127,27 @@ export class CartController {
     }
   }
 
+  async getCartPending(req: Request, res: Response) { 
+    try {
+      const cartService = new CartService();
+      const userId = req.user?.id; // Do middleware isAuthenticated
+      //const userId  = req.body; // Em vez de req.user.id
+
+      if (!userId) {
+        return res.status(400).json({ error: 'ID do usuário não encontrado' });
+      }
+
+      const carts = await cartService.getCartPending();
+      return res.json(carts);
+
+    } catch (error) {
+      console.error('[CART_CONTROLLER_ERROR]', error);
+      return res.status(500).json({ error: 'Erro ao buscar carrinho' });
+    }
+  }
+
+  
+  async finishCart(req: Request, res: Response) { }
+
+
 }

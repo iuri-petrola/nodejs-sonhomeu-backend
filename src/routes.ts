@@ -54,6 +54,8 @@ router.post('/cart', isAuthenticated, new CartController().addItem )
 //router.get('/cart', isAuthenticated, new CartController().getItems);
 router.get('/cart', isAuthenticated, new CartController().getCart);
 router.patch('/cart/close', isAuthenticated, new CartController().closeCart);
+router.get('/cart/pending', isAuthenticated, new CartController().getCartPending);
+router.patch('/cart/finish', isAuthenticated, new CartController().finishCart);
 //router.post('/cart/add', new AddCartItemController().handle )
 router.post('/cart/add', isAuthenticated, new AddCartItemController().handle )
 

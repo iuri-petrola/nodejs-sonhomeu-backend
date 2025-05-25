@@ -124,4 +124,29 @@ export class CartService {
   
     return cart?.items || [];
   }
+    
+  
+  async getCartPending() {
+    try {
+      const cart = await prismaClient.cart.findMany({
+        where: { open: false, finish: false },
+        include: { user: true,  
+                  items: {
+                    include: {
+                      product: true
+                    }
+                  }
+        }
+      });
+
+      return cart;
+
+    } 
+    catch (err) {
+        console.error('[GET_CARTS_PENDING_ERROR]', err);
+        return [];
+    }
+
+  }
+
 }
