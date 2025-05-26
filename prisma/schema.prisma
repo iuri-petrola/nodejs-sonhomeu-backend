@@ -17,6 +17,7 @@ datasource db {
 // npx prisma migrate deploy                                                      # aplicar migraçao
 // npx prisma migrate dev --name remove-user-open-unique
 // npx prisma migrate dev --name add-cart-finish
+// npx prisma migrate dev --name add-user-whatsapp
 
 // npx prisma db push                                                             # Forçar atualização do schema sem migrar
 
@@ -28,6 +29,7 @@ model User {
   name String
   email String
   password String
+  whatsapp String
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
 

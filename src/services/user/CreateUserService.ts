@@ -5,10 +5,11 @@ interface UserRequest{
   name: string;
   email: string;
   password: string;
+  whatsapp: string;
 }
 
 class CreateUserService{
-  async execute({ name, email, password }: UserRequest){
+  async execute({ name, email, password, whatsapp }: UserRequest){
 
     // verificar se ele enviou um email
     if(!email){
@@ -33,6 +34,7 @@ class CreateUserService{
         name: name,
         email: email,
         password: passwordHash,
+        whatsapp: whatsapp,
       },
       select:{
         id: true,
