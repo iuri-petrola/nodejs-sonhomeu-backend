@@ -147,7 +147,29 @@ export class CartController {
   }
 
   
-  async finishCart(req: Request, res: Response) { }
+  async finishCart(req: Request, res: Response) { 
+
+    const { cartId } = req.body;
+
+    if (!cartId) {
+      return res.status(400).json({ error: 'cartId não fornecido' });
+    }
+
+    console.log('cartId recebido:', cartId);
+
+    try {      
+      const cart = await prismaClient.cart.update({
+        where: { id: cartId },
+        data: { finish: true }
+      });
+
+      return res.status(200).json({ message: 'Pedido finalizado com sucesso!', cart });
+    } catch (err) {
+      console.error('[FINALIZAR_PEDIDO_ERROR]', err);
+      return res.status(500).json({ error: 'Erro ao finalizar pedido' });
+    }
+
+  }
 
 
 }
