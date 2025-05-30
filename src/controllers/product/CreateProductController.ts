@@ -6,6 +6,9 @@ class CreateProductController{
   async handle(req: Request, res: Response){
     const { name, price, description, category_id } = req.body;
 
+    console.log('BODY:', req.body);
+    console.log('FILE:', req.file);
+
     const createProductService = new CreateProductService();
 
     if(!req.file){
