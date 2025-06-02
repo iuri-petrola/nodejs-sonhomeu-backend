@@ -46,8 +46,7 @@ RUN apt install -y nodejs=18.20.8-1nodesource1
 
 
 WORKDIR /app
-COPY package.json ./
+COPY . .
 RUN npm install
 RUN npx prisma generate 
-COPY . .
 ENTRYPOINT npm run prd
