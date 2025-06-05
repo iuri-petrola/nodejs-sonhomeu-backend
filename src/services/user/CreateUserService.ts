@@ -6,10 +6,11 @@ interface UserRequest{
   email: string;
   password: string;
   whatsapp: string;
+  role?: 'ADMIN' | 'CLIENTE';
 }
 
 class CreateUserService{
-  async execute({ name, email, password, whatsapp }: UserRequest){
+  async execute({ name, email, password, whatsapp, role = 'CLIENTE'  }: UserRequest){
 
     // verificar se ele enviou um email
     if(!email){
@@ -35,11 +36,13 @@ class CreateUserService{
         email: email,
         password: passwordHash,
         whatsapp: whatsapp,
+        role: role
       },
       select:{
         id: true,
         name: true,       
         email: true,
+        role: true
       }
     })
 

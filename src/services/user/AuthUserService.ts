@@ -6,11 +6,12 @@ import { sign } from 'jsonwebtoken'
 interface AuthRequest{
   email: string;
   password: string;
+  requestAdminOnly?: boolean;
 }
 
 
 class AuthUserService{
-  async execute({ email, password }: AuthRequest){
+  async execute({ email, password, requestAdminOnly}: AuthRequest){
     //Verificar se o email existe.
     const user = await prismaClient.user.findFirst({
       where:{
@@ -21,6 +22,18 @@ class AuthUserService{
     if(!user){
       throw new Error("User/password incorrect")
     }
+
+    if (requestAdminOnly) {
+      if (user.role !== 'ADMIN') {
+        console.log('[BLOQUEADO] Usuário não é admin');
+        console.log('requestAdminOnly:', requestAdminOnly);
+        console.log('Usuário encontrado:', user.email, 'Role:', user.role);
+        throw new Error('Acesso restrito a administradores');
+      } else {
+        console.log('[OK] Usuário é ADMIN');
+      }
+    }
+
 
     // preciso verificar se a senha que ele mandou está correta.
     const passwordMatch = await compare(password, user.password)
@@ -34,7 +47,8 @@ class AuthUserService{
     const token = sign(
       {
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       },
       process.env.JWT_SECRET,
       {
@@ -48,6 +62,7 @@ class AuthUserService{
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token: token
      }
   }
