@@ -31,4 +31,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 })
 
-app.listen(8080, () => console.log('Back Up na porta 8080 !!!'))
+app.listen(8080, '0.0.0.0', () => console.log('Back Up na porta 8080 !!!'))
