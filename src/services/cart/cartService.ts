@@ -149,4 +149,27 @@ export class CartService {
 
   }
 
+  async getCartFinish() {
+    try {
+      const cart = await prismaClient.cart.findMany({
+        where: { open: false, finish: true },
+        include: { user: true,  
+                  items: {
+                    include: {
+                      product: true
+                    }
+                  }
+        }
+      });
+
+      return cart;
+
+    } 
+    catch (err) {
+        console.error('[GET_CARTS_FINISH_ERROR]', err);
+        return [];
+    }
+
+  }
+
 }
