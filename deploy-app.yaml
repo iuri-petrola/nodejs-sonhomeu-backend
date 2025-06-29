@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-someu-back
+  #namespace: test
+spec:
+  selector:
+    matchLabels:
+      app: nodejs-someu-back
+  template:
+    metadata:
+      labels:
+        app: nodejs-someu-back
+    spec:
+      containers:
+        - name: nodejs-someu-back
+          image: iuripetrola/nodejs-someu-back:latest
+          env:
+          - name: DATABASE_URL
+            value: "postgresql://user_nodejs_someu:pass_nodejs_someu@postgresql16:5432/db_nodejs_someu?schema=public"
+          - name: JWT_SECRET
+            value: "fbc878419638a610508320c876597c83"
+          ports:
+          - containerPort: 8080
+          #volumeMounts:
+          #- name: vol-postgresql16
+          #  mountPath: "/etc/postgresql/16/main"
+      #volumes:
+      #  - name: vol-postgresql16
+      #    persistentVolumeClaim: 
+      #      claimName: pvc-postgresql16
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-someu-back
+  #namespace: test
+spec:
+  selector: 
+    app: nodejs-someu-back
+  ports:
+    - port: 8080
+      targetPort: 8080
