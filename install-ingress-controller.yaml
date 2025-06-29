@@ -355,15 +355,15 @@ spec:
     targetPort: http
     nodePort: 30000
   - appProtocol: https
-    name: https
+    name: port-admin
     port: 4343
     protocol: TCP
     targetPort: https
-  - appProtocol: http
-    name: http
+  - appProtocol: https
+    name: port-back
     port: 8080
     protocol: TCP
-    targetPort: http
+    targetPort: https
   - appProtocol: https
     name: https
     port: 443
