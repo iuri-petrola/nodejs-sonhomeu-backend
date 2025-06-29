@@ -331,6 +331,12 @@ metadata:
     app.kubernetes.io/version: 1.10.0
   name: ingress-nginx-controller
   namespace: ingress-nginx
+data:
+  http-port: "4343"
+  proxy-real-ip-cidr: "0.0.0.0/0"
+data:
+  http-port: "8080"
+  proxy-real-ip-cidr: "0.0.0.0/0"
 ---
 apiVersion: v1
 kind: Service
@@ -358,12 +364,12 @@ spec:
     name: port-admin
     port: 4343
     protocol: TCP
-    targetPort: https
+    targetPort: port-admin
   - appProtocol: https
     name: port-back
     port: 8080
     protocol: TCP
-    targetPort: https
+    targetPort: port-back
   - appProtocol: https
     name: https
     port: 443
@@ -476,6 +482,12 @@ spec:
           protocol: TCP
         - containerPort: 443
           name: https
+          protocol: TCP
+        - containerPort: 8080
+          name: port-back
+          protocol: TCP
+        - containerPort: 4343
+          name: port-admin
           protocol: TCP
         - containerPort: 8443
           name: webhook
