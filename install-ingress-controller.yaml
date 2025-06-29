@@ -356,6 +356,16 @@ spec:
     nodePort: 30000
   - appProtocol: https
     name: https
+    port: 4343
+    protocol: TCP
+    targetPort: https
+  - appProtocol: http
+    name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  - appProtocol: https
+    name: https
     port: 443
     protocol: TCP
     targetPort: https
