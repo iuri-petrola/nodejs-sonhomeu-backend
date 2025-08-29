@@ -29,6 +29,7 @@ import uploadConfig from './config/multer'
 import { ListProductController } from './controllers/product/ListProductController';
 import { AddCartItemController } from './controllers/cart/AddCartItemController';
 import { CartController } from './controllers/cart/cartController';
+import { UpdateProductController } from './controllers/product/UpdateProductController';
 
 const router = Router();
 
@@ -48,6 +49,7 @@ router.post('/product', isAuthenticated, upload.single('file'), new CreateProduc
 //router.get('/product', isAuthenticated, new ListProductController().handle )
 router.get('/product', new ListProductController().handle )
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle )
+router.put('/product/:id', isAuthenticated, upload.single('file'), new UpdateProductController().handle);
 
 //-- ROTAS CARRINHO
 router.post('/cart', isAuthenticated, new CartController().addItem )

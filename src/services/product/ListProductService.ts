@@ -4,7 +4,10 @@ class ListProductService{
   async execute(){
     
     const ListProductService = await prismaClient.product.findMany({
-      include: { category: true }
+      include: { category: true },
+      orderBy: {
+        created_at: "desc" // os mais novos primeiro
+      }
     })
 
     return ListProductService;
