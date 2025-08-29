@@ -30,6 +30,7 @@ import { ListProductController } from './controllers/product/ListProductControll
 import { AddCartItemController } from './controllers/cart/AddCartItemController';
 import { CartController } from './controllers/cart/cartController';
 import { UpdateProductController } from './controllers/product/UpdateProductController';
+import { DeleteProductController } from './controllers/product/DeleteProductController';
 
 const router = Router();
 
@@ -50,6 +51,7 @@ router.post('/product', isAuthenticated, upload.single('file'), new CreateProduc
 router.get('/product', new ListProductController().handle )
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle )
 router.put('/product/:id', isAuthenticated, upload.single('file'), new UpdateProductController().handle);
+router.delete('/product/:id', isAuthenticated, new DeleteProductController().handle);
 
 //-- ROTAS CARRINHO
 router.post('/cart', isAuthenticated, new CartController().addItem )

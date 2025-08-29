@@ -19,6 +19,7 @@ datasource db {
 // npx prisma migrate dev --name add-cart-finish
 // npx prisma migrate dev --name add-user-whatsapp
 // npx prisma migrate dev --name add-role-to-user
+// npx prisma migrate dev --name add_ativo_product
 
 // npx prisma db push                                                             # Forçar atualização do schema sem migrar
 
@@ -63,6 +64,7 @@ model Product{
   banner String
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
+  ativo       Boolean  @default(true)
 
   category Category @relation(fields: [category_id], references: [id])
 
