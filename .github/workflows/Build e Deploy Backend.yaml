@@ -7,7 +7,7 @@ on:
 
 jobs:
   BUILD:
-    name: "Rodando a build sonhomeu-backend"
+    name: "Build backend"
     runs-on: [databasemart-sonhomeu-backend]
     steps:
       - name: Checkout do Codigo
@@ -26,5 +26,5 @@ jobs:
           file: ./dockerfile
           push: true
           tags: | 
-            iuripetrola/nodejs-someu-back:v${{github.Checkout.sha}}
+            iuripetrola/nodejs-someu-back:${{ github.checkout_sha }}
             iuripetrola/nodejs-someu-back:latest
