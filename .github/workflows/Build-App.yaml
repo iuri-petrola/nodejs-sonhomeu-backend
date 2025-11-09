@@ -1,0 +1,30 @@
+name: Build e Deploy Backend
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  BUILD:
+    name: "Rodando a build sonhomeu-backend"
+    runs-on: [databasemart-sonhomeu-backend]
+    steps:
+      - name: Checkout do Codigo
+        uses: actions/checkout@v4
+        
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build e Push da imagem para docker hub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./dockerfile
+          push: true
+          tags: | 
+            iuripetrola/nodejs-someu-back:v${{github.Checkout.sha}}
+            iuripetrola/nodejs-someu-back:latest
