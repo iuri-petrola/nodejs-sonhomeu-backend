@@ -34,3 +34,18 @@ jobs:
           tags: | 
             iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}
             iuripetrola/nodejs-someu-back:latest
+
+      - name: Executar o Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'image'
+          image-ref: 'iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}'
+          format: 'sarif'
+          output: 'trivy-docker-result.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload do arquivo trivy para o github
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: 'Docker result'
+          sarif_file: 'trivy-docker-result.sarif'
