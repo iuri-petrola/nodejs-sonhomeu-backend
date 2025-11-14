@@ -21,4 +21,4 @@ jobs:
         uses: Azure/k8s-deploy@v5
         with:
           manifests: deploy-app.yaml
-          images: iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}
+          images: iuripetrola/nodejs-someu-back:latest
