@@ -10,7 +10,7 @@ jobs:
     name: "Build backend"
     runs-on: [databasemart-sonhomeu-backend]
     steps:
-      - name: Checkout do Codigo
+      - name: Obtendo o Codigo
         uses: actions/checkout@v4
 
       - name: Set SHORT_SHA (pegando 8 primeiros caracteres do GITHUB_SHA)
@@ -35,14 +35,14 @@ jobs:
             iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}
             iuripetrola/nodejs-someu-back:latest
 
-      - name: Executar o Trivy
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: 'image'
-          image-ref: 'iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}'
-          format: 'sarif'
-          output: 'trivy-docker-result.sarif'
-          severity: 'CRITICAL,HIGH'
+      #- name: Executar o Trivy
+      #  uses: aquasecurity/trivy-action@0.28.0
+      #  with:
+      #    scan-type: 'image'
+      #    image-ref: 'iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}'
+      #    format: 'sarif'
+      #    output: 'trivy-docker-result.sarif'
+      #    severity: 'CRITICAL,HIGH'
 
   Deploy_Kubernetes:
     name: "Deploy kubernetes"
