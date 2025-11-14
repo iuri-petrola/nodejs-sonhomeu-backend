@@ -44,7 +44,7 @@ jobs:
           output: 'trivy-docker-result.sarif'
           severity: 'CRITICAL,HIGH'
 
-  deploy kubernetes:
+  Deploy_Kubernetes:
     name: "Deploy kubernetes"
     needs: Build
     uses: ./.github/workflows/Deploy kubernetes.yaml
