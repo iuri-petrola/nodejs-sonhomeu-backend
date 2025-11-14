@@ -1,0 +1,24 @@
+name: Deploy kubernetes
+
+on:
+  workflow_call:
+
+jobs:
+  Deploy:
+    name: "Deploy no kubernetes"
+    runs-on: [databasemart-sonhomeu-backend]
+    steps:
+      - name: Obtendo o Codigo
+        uses: actions/checkout@v4
+
+      - name: Configuraçao do contexto do kubernetes
+        uses: azure/k8s-set-context@v4
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      
+      - name: Deploy no Kubernetes
+        uses: Azure/k8s-deploy@v5
+        with:
+          manifests: deploy-app.yaml
+          images: iuripetrola/nodejs-someu-back:${{ env.SHORT_SHA }}

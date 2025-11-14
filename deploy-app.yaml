@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: nodejs-someu-back
-          image: iuripetrola/nodejs-someu-back:latest
+          image: iuripetrola/nodejs-someu-back
           env:
           - name: DATABASE_URL
             value: "postgresql://user_nodejs_someu:pass_nodejs_someu@postgresql16:5432/db_nodejs_someu?schema=public"

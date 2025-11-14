@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  BUILD:
+  Build:
     name: "Build backend"
     runs-on: [databasemart-sonhomeu-backend]
     steps:
@@ -43,3 +43,9 @@ jobs:
           format: 'sarif'
           output: 'trivy-docker-result.sarif'
           severity: 'CRITICAL,HIGH'
+
+  deploy kubernetes:
+    name: "Deploy kubernetes"
+    needs: Build
+    uses: ./.github/workflows/Deploy kubernetes.yaml
+    secrets: inherit   
