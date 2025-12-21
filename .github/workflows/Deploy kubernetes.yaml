@@ -15,7 +15,7 @@ jobs:
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+          kubeconfig: ${{ secrets.KUBE_CONFIG_AWS }}
       
       - name: Deploy no Kubernetes
         uses: Azure/k8s-deploy@v5
